@@ -108,7 +108,7 @@ export const registerUser = async (req, res) => {
     const baseUsername = name.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
     let username = baseUsername;
     let counter = 1;
-    
+
     // Ensure username is unique
     while (await User.findOne({ username })) {
       username = `${baseUsername}_${counter}`;
@@ -144,18 +144,18 @@ export const registerUser = async (req, res) => {
 
   } catch (err) {
     console.error("Registration error:", err.message);
-    
+
     // Handle duplicate key error (race condition)
     if (err.code === 11000) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Email or username already exists" 
+      return res.status(400).json({
+        success: false,
+        message: "Email or username already exists"
       });
     }
 
-    res.status(500).json({ 
-      success: false, 
-      message: "Server error" 
+    res.status(500).json({
+      success: false,
+      message: "Server error"
     });
   }
 };
@@ -166,16 +166,16 @@ export const loginUser = async (req, res) => {
 
     // Input validation
     if (!email || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Email and password are required" 
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required"
       });
     }
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid credentials" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
       });
     }
 
@@ -185,34 +185,34 @@ export const loginUser = async (req, res) => {
     // Same error message regardless of whether user exists or password is wrong
     // This prevents user enumeration
     if (!user) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid credentials" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
       });
     }
 
     // Check if user has password (not Google OAuth only)
     if (!user.password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Use Google Sign-In for this account" 
+      return res.status(400).json({
+        success: false,
+        message: "Use Google Sign-In for this account"
       });
     }
 
     // Verify password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid credentials" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
       });
     }
 
     // Check user status
     if (user.status !== "Active") {
-      return res.status(403).json({ 
-        success: false, 
-        message: "Account is not active" 
+      return res.status(403).json({
+        success: false,
+        message: "Account is not active"
       });
     }
 
@@ -260,9 +260,9 @@ export const loginUser = async (req, res) => {
 
   } catch (err) {
     console.error("Login error:", err.message);
-    res.status(500).json({ 
-      success: false, 
-      message: "Server error" 
+    res.status(500).json({
+      success: false,
+      message: "Server error"
     });
   }
 };
@@ -273,16 +273,16 @@ export const forgotPassword = async (req, res) => {
 
     // Input validation
     if (!email) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Email is required" 
+      return res.status(400).json({
+        success: false,
+        message: "Email is required"
       });
     }
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid email format" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format"
       });
     }
 
@@ -314,6 +314,7 @@ export const forgotPassword = async (req, res) => {
     user.otpExpires = new Date(otpExpires);
     await user.save();
 
+<<<<<<< HEAD
     // Send OTP email via Brevo
     try {
       await sendPasswordResetOTP(user.email, otp, user.name);
@@ -341,11 +342,26 @@ export const forgotPassword = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "If that email exists, an OTP has been sent to your email"
+=======
+    // In production, send email with reset link
+    // For now, return the plain token (development only)
+    // Example reset URL: /reset-password?token=<token>&email=<email>
+
+    res.status(200).json({
+      success: true,
+      message: "If that email exists, a password reset link has been sent",
+      // Development-only: include token for testing
+      // Remove this in production
+      ...(process.env.NODE_ENV !== "production" && {
+        resetToken: resetToken,
+        resetUrl: `/reset-password?token=${resetToken}&email=${user.email}`
+      })
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)
     });
 
   } catch (err) {
     console.error("Forgot password error:", err.message);
-    
+
     // Always return success to prevent enumeration
     res.status(200).json({
       success: true,
@@ -423,16 +439,16 @@ export const resetPassword = async (req, res) => {
 
     // Input validation
     if (!token || !email || !newPassword) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Token, email, and new password are required" 
+      return res.status(400).json({
+        success: false,
+        message: "Token, email, and new password are required"
       });
     }
 
     if (!isStrongPassword(newPassword)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Password must be at least 8 characters with one letter and one number" 
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters with one letter and one number"
       });
     }
 
@@ -447,9 +463,9 @@ export const resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid or expired reset token" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token"
       });
     }
 
@@ -470,9 +486,9 @@ export const resetPassword = async (req, res) => {
 
   } catch (err) {
     console.error("Reset password error:", err.message);
-    res.status(500).json({ 
-      success: false, 
-      message: "Server error" 
+    res.status(500).json({
+      success: false,
+      message: "Server error"
     });
   }
 };
@@ -562,6 +578,7 @@ export const checkAuth = (req, res) => {
   });
 };
 
+<<<<<<< HEAD
 // Google OAuth - Initiate
 export const googleAuth = async (req, res, next) => {
   console.log('[Google OAuth] Initiating Google login...');
@@ -809,3 +826,68 @@ export const resetPasswordWithToken = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+=======
+export const googleAuth = (req, res, next) => {
+  // This is typically handled by passport middleware
+  // Redirect to Passport Google OAuth flow
+  res.status(200).json({
+    success: true,
+    message: "Google auth endpoint - handled by passport"
+  });
+};
+
+export const googleAuthCallback = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Google authentication failed"
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        userId: req.user._id,
+        email: req.user.email,
+        username: req.user.username,
+        role: req.user.role,
+        name: req.user.name
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // Store current token for session invalidation
+    req.user.currentToken = token;
+    await req.user.save();
+
+    // Set HTTP-only cookie
+    res.cookie("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    // Redirect with token and user data
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const userData = encodeURIComponent(JSON.stringify({
+      id: req.user._id,
+      username: req.user.username,
+      email: req.user.email,
+      name: req.user.name,
+      role: req.user.role,
+      avatar: req.user.avatar
+    }));
+
+    const redirectUrl = `${clientUrl}/login?token=${token}&user=${userData}`;
+    return res.redirect(redirectUrl);
+
+  } catch (error) {
+    console.error("Google auth callback error:", error);
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    return res.redirect(`${clientUrl}/login?error=authentication_failed`);
+  }
+};
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)

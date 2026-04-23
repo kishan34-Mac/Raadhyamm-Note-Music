@@ -31,7 +31,10 @@
     "mongodb": "^7.0.0",
     "mongoose": "^8.20.0",
     "morgan": "^1.10.0",
+<<<<<<< HEAD
     "nodemailer": "^8.0.5",
+=======
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "slugify": "^1.6.6"

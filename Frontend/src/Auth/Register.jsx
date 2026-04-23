@@ -77,8 +77,12 @@ const RegisterPage = () => {
     if (!formData.email) e.email = 'Email is required';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) e.email = 'Enter a valid email';
     if (!formData.password) e.password = 'Password is required';
+<<<<<<< HEAD
     else if (formData.password.length < 8) e.password = 'Minimum 8 characters with a letter and number';
     else if (!/^(?=.*[A-Za-z])(?=.*\d)/.test(formData.password)) e.password = 'Must contain at least one letter and one number';
+=======
+    else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password)) e.password = 'At least 8 chars, 1 letter, 1 number';
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)
     if (!formData.confirmPassword) e.confirmPassword = 'Please confirm your password';
     else if (formData.password !== formData.confirmPassword) e.confirmPassword = 'Passwords do not match';
     if (!userCaptcha) e.captcha = 'CAPTCHA is required';
@@ -103,7 +107,7 @@ const RegisterPage = () => {
       }
     } catch (err) {
       const msg = err.response?.data?.message || 'Registration failed. Please try again.';
-      if (err.response?.status === 409) setErrors({ email: 'This email is already registered.' });
+      if (err.response?.status === 409 || msg.includes('Email already exists') || err.response?.data?.message === 'Email or username already exists') { setErrors({ email: 'This email is already registered.' }); }
       else if (err.response?.data?.field) setErrors({ [err.response.data.field]: msg });
       else setErrors({ general: msg });
       generateCaptcha(); setUserCaptcha('');
@@ -303,7 +307,11 @@ const RegisterPage = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
+<<<<<<< HEAD
                       placeholder="Min 8 chars + number"
+=======
+                      placeholder="Min 8 chars"
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)
                       style={{ ...inputStyle('password'), paddingRight: 32 }}
                       onFocus={() => setFocused('password')}
                       onBlur={() => setFocused('')}

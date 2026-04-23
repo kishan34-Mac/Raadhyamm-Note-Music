@@ -975,6 +975,7 @@ export const getAllUsersAdmin = async (req, res) => {
       User.countDocuments(query)
     ]);
 
+<<<<<<< HEAD
     // Get enrollment stats for each user
     const userIds = users.map(u => u._id);
     
@@ -1071,6 +1072,24 @@ export const getAllUsersAdmin = async (req, res) => {
       count: total,
       users: usersWithStats
     });
+=======
+    // Attach enrollment counts to each user
+    const usersWithStats = await Promise.all(users.map(async (u) => {
+      const enrollments = await Enrollment.find({ user: u._id });
+      const completedCount = enrollments.filter(e => e.progress === 100).length;
+      const avgProgress = enrollments.length > 0
+        ? Math.round(enrollments.reduce((s, e) => s + (e.progress || 0), 0) / enrollments.length)
+        : 0;
+      return {
+        ...u.toObject(),
+        enrolledCourses:  enrollments.length,
+        completedCourses: completedCount,
+        progress:         avgProgress,
+      };
+    }));
+
+    res.status(200).json({ success: true, count: total, users: usersWithStats });
+>>>>>>> 9a29565 (first commit: production ready fullstack structure)
 
   } catch (error) {
     console.error('Get Users Error:', error);
