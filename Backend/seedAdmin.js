@@ -5,28 +5,18 @@ const seedAdmin = async () => {
   try {
     // Check if admin already exists
     const existingAdmin = await User.findOne({ email: "admin@raadhyam.com" });
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
     if (existingAdmin) {
       console.log("Admin user already exists");
       return;
     }
-<<<<<<< HEAD
-    
-    const hashedPassword = await bcrypt.hash("Admin@1234", 12);
-    
-    await User.create({
-=======
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash("Admin@1234", 12);
+    // Hash the password - use environment variable in production
+    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || "ChangeMe@Production2024";
+    const hashedPassword = await bcrypt.hash(defaultPassword, 12);
 
     // Create admin user
     const admin = await User.create({
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
       email: "admin@raadhyam.com",
       username: "raadhyam_admin",
       password: hashedPassword,

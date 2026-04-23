@@ -151,7 +151,7 @@ courseSchema.index({ "instructor._id": 1 });
 **Default Admin Created:**
 
 - Email: `admin@raadhyam.com`
-- Password: `Admin@1234` (CHANGE IN PRODUCTION!)
+- Password: Set via ADMIN_DEFAULT_PASSWORD environment variable
 - Role: admin
 - Status: Active
 

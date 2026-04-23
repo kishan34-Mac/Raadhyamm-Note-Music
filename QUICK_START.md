@@ -100,7 +100,7 @@ npm run seed:admin
 **Admin credentials:**
 
 - Email: `admin@raadhyam.com`
-- Password: `Admin@1234`
+- Password: Set via ADMIN_DEFAULT_PASSWORD env variable (default: check resetAdmin.js)
 
 ### Step 5: Access the Application
 

@@ -6,7 +6,8 @@ import bcrypt from 'bcryptjs';
 import User from './models/users.js';
 
 const ADMIN_EMAIL    = 'admin@raadhyam.com';
-const ADMIN_PASSWORD = 'Admin@1234';
+// Password from environment variable or use secure default
+const ADMIN_PASSWORD = process.env.ADMIN_DEFAULT_PASSWORD || 'ChangeMe@2024';
 
 async function reset() {
   await mongoose.connect(process.env.MONGODB_URL);

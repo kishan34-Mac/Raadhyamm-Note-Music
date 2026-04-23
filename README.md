@@ -92,7 +92,7 @@ When the backend starts for the first time, it seeds an admin account:
 | Field    | Value                  |
 |----------|------------------------|
 | Email    | `admin@raadhyam.com`   |
-| Password | `Admin@1234`           |
+| Password | Check your .env file  |
 
 ---
 

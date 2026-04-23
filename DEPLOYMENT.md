@@ -53,7 +53,7 @@ This will:
 - Test MongoDB connection
 - Create default admin user (if not exists)
 - Email: `admin@raadhyam.com`
-- Password: `Admin@1234`
+- Password: Set via ADMIN_DEFAULT_PASSWORD env variable
 
 ### 4. Start Backend Server
 
