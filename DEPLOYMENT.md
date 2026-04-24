@@ -36,7 +36,7 @@ cp .env.example .env
 
 ```env
 NODE_ENV=production
-MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/database_name?retryWrites=true&w=majority
+MONGODB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/database_name?retryWrites=true&w=majority
 JWT_SECRET=<generate-random-32-char-string>
 SESSION_SECRET=<generate-random-32-char-string>
 CLIENT_URL=https://your-frontend-domain.com
@@ -288,7 +288,7 @@ tail -f /var/log/nginx/error.log
 **MongoDB backup:**
 
 ```bash
-mongodump --uri="mongodb+srv://username:password@cluster.mongodb.net/database" --out ./backup
+mongodump --uri="mongodb+srv://<username>:<password>@cluster.mongodb.net/database" --out ./backup
 ```
 
 **Restore backup:**

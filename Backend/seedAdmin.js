@@ -11,8 +11,11 @@ const seedAdmin = async () => {
       return;
     }
 
-    // Hash the password - use environment variable in production
-    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || "ChangeMe@Production2024";
+    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD;
+    if (!defaultPassword) {
+      console.log("Skipping admin creation: ADMIN_DEFAULT_PASSWORD environment variable is not set.");
+      return;
+    }
     const hashedPassword = await bcrypt.hash(defaultPassword, 12);
 
     // Create admin user

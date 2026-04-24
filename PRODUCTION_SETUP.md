@@ -76,7 +76,7 @@ sudo certbot certonly --nginx -d api.yourdomain.com
 
 ```env
 # Secure connection string includes credentials
-MONGODB_URL=mongodb+srv://username:password@cluster-name.mongodb.net/database_name?ssl=true&authSource=admin
+MONGODB_URL=mongodb+srv://<username>:<password>@cluster-name.mongodb.net/database_name?ssl=true&authSource=admin
 ```
 
 ### 6. API Keys Protection

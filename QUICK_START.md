@@ -39,7 +39,7 @@ cp Backend/.env.example Backend/.env
 Edit `Backend/.env` and update:
 
 ```
-MONGODB_URL=mongodb+srv://your_username:your_password@your_cluster.mongodb.net/raadhyam?retryWrites=true&w=majority
+MONGODB_URL=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/raadhyam?retryWrites=true&w=majority
 CLIENT_URL=http://localhost:5173
 JWT_SECRET=<any-random-string-32-chars>
 SESSION_SECRET=<any-random-string-32-chars>

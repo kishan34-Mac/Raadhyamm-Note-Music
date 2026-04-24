@@ -5,9 +5,12 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import User from './models/users.js';
 
-const ADMIN_EMAIL    = 'admin@raadhyam.com';
-// Password from environment variable or use secure default
-const ADMIN_PASSWORD = process.env.ADMIN_DEFAULT_PASSWORD || 'ChangeMe@2024';
+const ADMIN_EMAIL = 'admin@raadhyam.com';
+const ADMIN_PASSWORD = process.env.ADMIN_DEFAULT_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  console.error("Error: ADMIN_DEFAULT_PASSWORD environment variable is not set.");
+  process.exit(1);
+}
 
 async function reset() {
   await mongoose.connect(process.env.MONGODB_URL);
@@ -18,12 +21,12 @@ async function reset() {
   const admin = await User.findOneAndUpdate(
     { email: ADMIN_EMAIL },
     {
-      email:    ADMIN_EMAIL,
+      email: ADMIN_EMAIL,
       username: 'raadhyam_admin',
       password: hash,
-      name:     'Admin',
-      role:     'admin',
-      status:   'Active',
+      name: 'Admin',
+      role: 'admin',
+      status: 'Active',
       currentToken: null,
     },
     { upsert: true, new: true }
