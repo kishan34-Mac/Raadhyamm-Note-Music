@@ -9,16 +9,6 @@ import morgan from 'morgan';
 
 dotenv.config({ path: './.env' });
 
-<<<<<<< HEAD
-const validateEnvironment = () => {
-  const required = ['JWT_SECRET', 'MONGODB_URL'];
-  const missing = required.filter((key) => !process.env[key]);
-
-  if (missing.length > 0) {
-    console.error(`Missing required environment variables: ${missing.join(', ')}`);
-    process.exit(1);
-  }
-=======
 // Validate required environment variables
 const validateEnvironment = () => {
   const required = ['JWT_SECRET', 'MONGODB_URL'];
@@ -30,7 +20,6 @@ const validateEnvironment = () => {
   }
 
   console.log('✅ All required environment variables are set');
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
 };
 
 const startServer = async () => {
@@ -70,46 +59,6 @@ const startServer = async () => {
   const app = express();
   const PORT = process.env.PORT || 5000;
   const NODE_ENV = process.env.NODE_ENV || 'development';
-<<<<<<< HEAD
-
-  app.use(helmet({
-    contentSecurityPolicy: false,
-    crossOriginResourcePolicy: { policy: 'cross-origin' }
-  }));
-
-  app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  }));
-  app.use(compression());
-  app.use(morgan(NODE_ENV === 'production' ? 'combined' : 'dev'));
-
-  const limiter = rateLimit({
-    windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
-    max: Number(process.env.RATE_LIMIT_MAX_REQUESTS || 100),
-    message: 'Too many requests from this IP, please try again later.',
-    standardHeaders: true,
-    legacyHeaders: false,
-    skip: () => NODE_ENV !== 'production'
-  });
-
-  const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
-    message: 'Too many authentication attempts, please try again later.',
-    standardHeaders: true,
-    legacyHeaders: false,
-    skipSuccessfulRequests: true
-  });
-
-  app.use('/api', limiter);
-  app.use('/api/auth/login', authLimiter);
-  app.use('/api/auth/register', authLimiter);
-
-=======
-
   console.log(`🚀 Starting Raadhyam Backend in ${NODE_ENV} mode...`);
 
   // ============ Security Middleware ============
@@ -141,7 +90,6 @@ const startServer = async () => {
   }
 
   // Parsing middleware
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({
     extended: true,
@@ -182,11 +130,7 @@ const startServer = async () => {
         secure: NODE_ENV === 'production',
         httpOnly: true,
         sameSite: 'strict',
-<<<<<<< HEAD
-        maxAge: 7 * 24 * 60 * 60 * 1000
-=======
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
       }
     })
   );
@@ -229,21 +173,12 @@ const startServer = async () => {
   // ============ Database & Server Startup ============
 
   await connectDB();
-<<<<<<< HEAD
-  
   // Seed admin user if not exists (non-fatal)
   try {
     await seedAdmin();
   } catch (err) {
     console.warn('seedAdmin skipped:', err.message);
   }
-  
-  const server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-=======
-
-  // Seed admin user if not exists
-  await seedAdmin();
 
   const server = app.listen(PORT, () => {
     console.log(`\n✅ Server is running on http://localhost:${PORT}`);
@@ -252,33 +187,6 @@ const startServer = async () => {
   });
 
   // Graceful shutdown
-  process.on('SIGTERM', () => {
-    console.log('SIGTERM signal received: closing HTTP server');
-    server.close(() => {
-      console.log('HTTP server closed');
-      process.exit(0);
-    });
-  });
-
-  process.on('SIGINT', () => {
-    console.log('SIGINT signal received: closing HTTP server');
-    server.close(() => {
-      console.log('HTTP server closed');
-      process.exit(0);
-    });
-  });
-
-  process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
-    process.exit(1);
-  });
-
-  process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-    process.exit(1);
->>>>>>> 9a29565 (first commit: production ready fullstack structure)
-  });
-
   process.on('SIGTERM', () => {
     console.log('SIGTERM signal received: closing HTTP server');
     server.close(() => {
